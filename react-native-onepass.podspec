@@ -14,8 +14,9 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/Martinzz/react-native-onepass.git", :tag => "#{s.version}" }
 
   
-  s.source_files = "ios/**/*.{h,m,mm,swift}"
-  
+  s.source_files = "ios/*.{h,m,mm,swift}"
+  s.resources =  'ios/libs/ATAuthSDK.framework/ATAuthSDK.bundle'
+  s.vendored_frameworks = 'ios/libs/*.framework'
 
   s.dependency "React-Core"
 end
