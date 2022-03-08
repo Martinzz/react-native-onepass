@@ -130,9 +130,9 @@ RCT_REMAP_METHOD(buildWithStyleGetToken, withStyle:(NSUInteger)style
                    [PNSCodeLoginControllerClickCheckBoxBtn isEqualToString:resultCode] ||
                    [PNSCodeLoginControllerClickProtocol isEqualToString:resultCode]) {
             // 切换其它登录方式
-//            if([PNSCodeLoginControllerClickChangeBtn isEqualToString:resultCode]){
-//                [[TXCommonHandler sharedInstance] cancelLoginVCAnimated:YES complete:nil];
-//            }
+            if([PNSCodeLoginControllerClickChangeBtn isEqualToString:resultCode]){
+                [[TXCommonHandler sharedInstance] cancelLoginVCAnimated:YES complete:nil];
+            }
             [weakSelf sendEvent:onAuthUIControlClick params:@{
               @"code": resultCode,
               @"msg": [resultDic objectForKey:@"msg"]
