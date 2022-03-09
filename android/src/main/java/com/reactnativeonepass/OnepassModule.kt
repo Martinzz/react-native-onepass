@@ -1,5 +1,6 @@
 package com.reactnativeonepass
 
+import android.text.TextUtils
 import android.util.Log
 import com.facebook.react.bridge.*
 import com.mobile.auth.gatewayauth.model.TokenRet
@@ -7,9 +8,9 @@ import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.mobile.auth.gatewayauth.*
 import com.reactnativeonepass.config.BaseUIConfig
 import com.facebook.react.bridge.ReactMethod
-
-
-
+import org.json.JSONException
+import org.json.JSONObject
+import com.facebook.react.bridge.WritableMap
 
 class OnepassModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
     private val TAG = "OnepassModule"
@@ -78,6 +79,7 @@ class OnepassModule(reactContext: ReactApplicationContext) : ReactContextBaseJav
             val pTokenRet = TokenRet.fromJson(s)
             val writableMap = Arguments.createMap()
             writableMap.putString("code", pTokenRet.code)
+            writableMap.putString("token", pTokenRet.token)
             writableMap.putString("msg", pTokenRet.msg)
             promise.resolve(writableMap)
         } catch (e: Exception) {
@@ -123,8 +125,29 @@ class OnepassModule(reactContext: ReactApplicationContext) : ReactContextBaseJav
         if(mPhoneNumberAuthHelper == null)return
         mPhoneNumberAuthHelper!!.setUIClickListener(AuthUIControlClickListener { code, context, jsonString ->
             val writableMap = Arguments.createMap()
-            writableMap.putString("code", code)
-            writableMap.putString("jsonString", jsonString)
+            try {
+                if (!TextUtils.isEmpty(jsonString)) {
+                    var jsonObject = JSONObject(jsonString)
+                    val iterator = jsonObject.keys()
+                    while (iterator.hasNext()) {
+                        val key = iterator.next()
+                        val value = jsonObject.get(key)
+                        if (value is Boolean) {
+                            writableMap.putBoolean(key, value)
+                        } else if (value is Int) {
+                            writableMap.putInt(key, value)
+                        } else if (value is String) {
+                            writableMap.putString(key, value)
+                        } else {
+                            writableMap.putString(key, value.toString())
+                        }
+                    }
+
+                }
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+            writableMap.putString("resultCode", code)
             emit("onAuthUIControlClick", writableMap)
         })
 
@@ -136,6 +159,8 @@ class OnepassModule(reactContext: ReactApplicationContext) : ReactContextBaseJav
                     if (ResultCode.CODE_SUCCESS == tokenRet.code) {
                         Log.i(TAG, "获取token成功：$s")
 //                        token = tokenRet.token
+                        mPhoneNumberAuthHelper!!.hideLoginLoading()
+                        mPhoneNumberAuthHelper!!.quitLoginPage()
                         mPhoneNumberAuthHelper!!.setAuthListener(null)
                         returnMap(s, promise)
                     }
@@ -145,10 +170,10 @@ class OnepassModule(reactContext: ReactApplicationContext) : ReactContextBaseJav
             }
 
             override fun onTokenFailed(s: String) {
-                returnMap(s, promise)
                 //如果环境检查失败 使用其他登录方式
                 mPhoneNumberAuthHelper!!.quitLoginPage()
                 mPhoneNumberAuthHelper!!.setAuthListener(null)
+                returnMap(s, promise)
             }
         }
         mPhoneNumberAuthHelper!!.setAuthListener(mTokenResultListener)

@@ -38,7 +38,8 @@ type BuildLayout = {
   privacyNavTitleSize?: number; // 协议详情页导航栏标题文字大小
   privacyNavBackImage?: string; // 协议详情页导航栏返回图片
   sloganText?: Font; // slogan文案文字
-  loginBtnText?: Font; // slogan文案文字
+  logBtnToastHidden?: boolean; // 登录默认toast提示，android
+  loginBtnText?: Font; // 登录按钮文字
   loginBtnBgImgs?: [string, string, string]; // 登录按钮图片组 @[激活状态的图片,失效状态的图片,高亮状态的图片]
   changeBtnTitle?: Font; // 切换按钮文字
   changeBtnIsHidden?: boolean; // 切换按钮是否隐藏

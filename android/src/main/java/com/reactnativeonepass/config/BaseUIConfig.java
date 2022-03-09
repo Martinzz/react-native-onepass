@@ -52,7 +52,9 @@ public abstract class BaseUIConfig {
     }
 
     protected AuthUIConfig.Builder setUILayout(ReadableMap layout, AuthUIConfig.Builder builder){
-        builder.setLogBtnToastHidden(true);
+        if(layout.hasKey("logBtnToastHidden")){
+            builder.setLogBtnToastHidden(layout.getBoolean("logBtnToastHidden"));
+        }
         if(layout.hasKey("navIsHidden")){
             builder.setNavHidden(layout.getBoolean("navIsHidden"));
         }

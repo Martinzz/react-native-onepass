@@ -95,11 +95,11 @@ RCT_REMAP_METHOD(checkAndPrepareEnv,
 }
 
 - (void)gotoSmsControllerAndShowNavBar {
-   
+
 }
 
 - (void)gotoSmsControllerAndHiddenNavBar {
-   
+
 }
 
 RCT_REMAP_METHOD(buildWithStyleGetToken, withStyle:(NSUInteger)style
@@ -133,15 +133,13 @@ RCT_REMAP_METHOD(buildWithStyleGetToken, withStyle:(NSUInteger)style
             if([PNSCodeLoginControllerClickChangeBtn isEqualToString:resultCode]){
                 [[TXCommonHandler sharedInstance] cancelLoginVCAnimated:YES complete:nil];
             }
-            [weakSelf sendEvent:onAuthUIControlClick params:@{
-              @"code": resultCode,
-              @"msg": [resultDic objectForKey:@"msg"]
-            }];
+            [weakSelf sendEvent:onAuthUIControlClick params:resultDic];
         } else if ([PNSCodeSuccess isEqualToString:resultCode]) {
             [[TXCommonHandler sharedInstance] cancelLoginVCAnimated:YES complete:nil];
             resolve(@{
                 @"code": resultCode,
-                @"msg": [resultDic objectForKey:@"token"]
+                @"msg": [resultDic objectForKey:@"msg"],
+                @"token": [resultDic objectForKey:@"token"]
             });
         } else {
             resolve(@{
@@ -150,7 +148,7 @@ RCT_REMAP_METHOD(buildWithStyleGetToken, withStyle:(NSUInteger)style
             });
         }
     }];
-    
+
 }
 
 @end
