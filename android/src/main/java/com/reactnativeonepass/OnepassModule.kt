@@ -1,19 +1,14 @@
 package com.reactnativeonepass
 
-import android.content.pm.ActivityInfo
-import android.graphics.Color
-import android.os.Build
 import android.util.Log
-import android.util.TypedValue
-import android.view.View
-import android.widget.RelativeLayout
-import android.widget.TextView
 import com.facebook.react.bridge.*
 import com.mobile.auth.gatewayauth.model.TokenRet
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.mobile.auth.gatewayauth.*
-import com.reactnativeonepass.AppUtils.dp2px
 import com.reactnativeonepass.config.BaseUIConfig
+import com.facebook.react.bridge.ReactMethod
+
+
 
 
 class OnepassModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
@@ -33,6 +28,16 @@ class OnepassModule(reactContext: ReactApplicationContext) : ReactContextBaseJav
     
       promise.resolve(a * b)
     
+    }
+
+    @ReactMethod
+    fun addListener(eventName: String) {
+        // Set up any upstream listeners or background tasks as necessary
+    }
+
+    @ReactMethod
+    fun removeListeners(count: Int?) {
+        // Remove upstream listeners, stop unnecessary background tasks
     }
 
     /**

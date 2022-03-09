@@ -1,6 +1,6 @@
 {
   "name": "react-native-onepass",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Alibaba Cloud one-click login number authentication",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
